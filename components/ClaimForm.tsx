@@ -7,12 +7,12 @@ import { DistributionUnit } from "@/types"
 import { useProofParams } from "@/hooks/useProofParams"
 import { useClaimableAmount } from "@/hooks/useClaimableAmount"
 import { useDistributionUnitState } from "@/hooks/useDistributionUnitState"
+import { Spinner } from "@/components/Spinner"
 import { RewardTokenSymbol } from "@/components/RewardTokenSymbol"
 import { RewardAmountClaimable } from "@/components/RewardAmountClaimable"
 import { selectChainInfo } from "@/utils/selectChainInfo"
 import { DistributorContract } from "@/config/contracts"
-
-const buttonClass = "w-full text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
+import { Button } from "@/components/ui/button"
 
 const useClaim = (unit: DistributionUnit) => {
     const { token } = unit
@@ -92,20 +92,20 @@ function ClaimButton({ loading, disabled, unit }: { loading: boolean, disabled: 
     }
 
     return (
-        <button type="submit" className={buttonClass} disabled={disabled}>
-            {loading && <span>loading</span>}
+        <Button type="submit" className="w-full" disabled={disabled}>
+            <Spinner loading={loading} />
             <span>
                 Claim <RewardAmountClaimable unit={unit} /> <RewardTokenSymbol unit={unit} />
             </span>
-        </button>
+        </Button>
     )
 }
 
 function EmptyButton() {
     return (
-        <button type="button" className={buttonClass} disabled>
+        <Button type="button" className="w-full" disabled>
             -
-        </button>
+        </Button>
     )
 }
 
@@ -113,9 +113,9 @@ function ConnectWalletButton() {
     const { openConnectModal } = useConnectModal()
 
     return (
-        <button type="button" className={buttonClass} onClick={openConnectModal}>
+        <Button type="button" className="w-full" onClick={openConnectModal}>
             Connect wallet
-        </button>
+        </Button>
     )
 }
 
@@ -125,24 +125,24 @@ function SwitchChainButton({ chainId }: { chainId: number }) {
     const { openChainModal } = useChainModal()
 
     return (
-        <button type="button" className={buttonClass} onClick={openChainModal}>
+        <Button type="button" className="w-full" onClick={openChainModal}>
             Switch to {chain.name}
-        </button>
+        </Button>
     )
 }
 
 function NoRewardButton() {
     return (
-        <button type="button" className={buttonClass} disabled>
+        <Button type="button" className="w-full" disabled>
             Nothing to claim
-        </button>
+        </Button>
     )
 }
 
 function PendingDistributionButton() {
     return (
-        <button type="button" className={buttonClass} disabled>
+        <Button type="button" className="w-full" disabled>
             Distribution is pending
-        </button>
+        </Button>
     )
 }

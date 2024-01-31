@@ -2,7 +2,7 @@ import "./globals.css"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 
-import { ConnectButton } from "@rainbow-me/rainbowkit"
+import { Navbar } from "@/components/Navbar"
 import { WalletProvider } from "@/components/WalletProvider"
 import { ReactQueryProvider } from "@/components/ReactQueryProvider"
 
@@ -16,14 +16,14 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
     return (
         <html lang="en">
-            <body className={inter.className}>
+            <body className={`${inter.className} dark mb-32`}>
                 <WalletProvider>
                     <ReactQueryProvider>
-                        <div className="flex flex-col gap-8 w-96 container mx-auto lg:w-[48rem]">
-                            <div className="flex-grow-0">
-                                <ConnectButton />
+                        <div className="flex flex-col gap-8">
+                            <Navbar />
+                            <div className="px-8 w-full lg:max-w-[48rem] mx-auto">
+                                {children}
                             </div>
-                            {children}
                         </div>
                     </ReactQueryProvider>
                 </WalletProvider>
