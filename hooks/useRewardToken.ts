@@ -2,11 +2,13 @@ import { useAccount } from "wagmi"
 import { useQuery } from "@tanstack/react-query"
 
 type RewardToken = {
+    root: `0x${string}`
     amount: bigint
     proofs: `0x${string}`[]
 }
 
 type RewardTokenJson = {
+    root: `0x${string}`
     amount: string
     proofs: `0x${string}`[]
 }
