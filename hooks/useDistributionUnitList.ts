@@ -1,26 +1,22 @@
 import { useQuery } from "@tanstack/react-query"
+import { DistributionUnit } from "@/types"
 
-type RewardToken = {
-    chainId: number
-    token: `0x${string}`
-    blockNumber: bigint
-}
-
-type RewardTokenJson = {
+type DistributionUnitJson = {
     chainId: number
     token: `0x${string}`
     blockNumber: string
+    root: `0x${string}`
 }
 
-export const useRewardTokenList = () => {
+export const useDistributionUnitList = () => {
     return useQuery({
         queryKey: ["reward-token-list"],
-        queryFn: async (): Promise<RewardToken[]> => {
+        queryFn: async (): Promise<DistributionUnit[]> => {
             const url = "/api/rewards"
 
             const response = await fetch(url)
 
-            const data: RewardTokenJson[] = await response.json()
+            const data: DistributionUnitJson[] = await response.json()
 
             return data.map(item => ({
                 ...item, blockNumber: BigInt(item.blockNumber)

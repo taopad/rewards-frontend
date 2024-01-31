@@ -1,9 +1,9 @@
-import { RewardTokenList } from "@/components/RewardTokenList";
+import { DistributionUnitList } from "@/components/DistributionUnitList"
 
 export default function Home() {
     return (
         <main>
-            <RewardTokenList />
+            <DistributionUnitList />
         </main>
     )
 }

@@ -3,19 +3,22 @@
 import { useNetwork, useAccount } from "wagmi"
 import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from "wagmi"
 import { useChainModal } from "@rainbow-me/rainbowkit"
-import { useRewardToken } from "@/hooks/useRewardToken"
-import { useRewardTokenState } from "@/hooks/useRewardTokenState"
-import { selectChainInfo } from "@/utils/selectChainInfo"
+import { DistributionUnit } from "@/types"
+import { useProofParams } from "@/hooks/useProofParams"
+import { useDistributionUnitState } from "@/hooks/useDistributionUnitState"
 import { DistributorContract } from "@/config/contracts"
+import { selectChainInfo } from "@/utils/selectChainInfo"
 
-const useClaim = (chainId: number, token: `0x${string}`, blockNumber: bigint) => {
+const useClaim = (unit: DistributionUnit) => {
+    const { token } = unit
+
     const { chain } = useNetwork()
     const { isConnected, address } = useAccount()
-    const state = useRewardTokenState(chainId, token, blockNumber)
-    const reward = useRewardToken(chainId, token, blockNumber)
+    const state = useDistributionUnitState(unit)
+    const params = useProofParams(unit)
 
-    const amount = reward.data?.amount
-    const proofs = reward.data?.proofs
+    const amount = params.data?.amount
+    const proofs = params.data?.proofs
 
     const prepare = usePrepareContractWrite({
         ...DistributorContract,
@@ -38,9 +41,11 @@ const useClaim = (chainId: number, token: `0x${string}`, blockNumber: bigint) =>
     return { state, prepare, action, wait }
 }
 
-export function ClaimForm({ chainId, token, blockNumber }: { chainId: number, token: `0x${string}`, blockNumber: bigint }) {
+export function ClaimForm({ unit }: { unit: DistributionUnit }) {
+    const { chainId } = unit
+
     const { chain } = useNetwork()
-    const { prepare, action, wait } = useClaim(chainId, token, blockNumber)
+    const { prepare, action, wait } = useClaim(unit)
 
     if (chain === undefined) {
         return null
