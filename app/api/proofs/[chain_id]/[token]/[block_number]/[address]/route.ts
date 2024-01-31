@@ -26,7 +26,7 @@ export async function GET(request: Request, { params }: { params: Params }) {
         return Response.error()
     }
 
-    const result = await prisma.proofs.findFirst({
+    const result = await prisma.distributions_proofs.findFirst({
         select: {
             amount: true,
             proofs: true,
