@@ -11,12 +11,12 @@ export function RewardAmountReceived({ unit }: { unit: DistributionUnit }) {
     const proof = useProofParams(unit)
     const metadata = useTokenMetadata(chainId, token)
 
-    const received = proof.data?.amount
+    const amount = proof.data?.amount
     const decimals = metadata.data?.decimals.result
 
-    if (received === undefined || decimals === undefined) {
+    if (amount === undefined || decimals === undefined) {
         return <span>-</span>
     }
 
-    return <span>{formatUnits(received, decimals)}</span>
+    return <span>{formatUnits(amount, decimals)}</span>
 }

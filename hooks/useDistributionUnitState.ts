@@ -13,7 +13,7 @@ export function useDistributionUnitState(unit: DistributionUnit): DistributionUn
         watch: true,
     })
 
-    if (onChainRoot.data === null) {
+    if (onChainRoot.data === undefined) {
         return "loading"
     }
 

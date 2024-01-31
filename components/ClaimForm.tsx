@@ -5,6 +5,7 @@ import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from
 import { useChainModal, useConnectModal } from "@rainbow-me/rainbowkit"
 import { DistributionUnit } from "@/types"
 import { useProofParams } from "@/hooks/useProofParams"
+import { useClaimableAmount } from "@/hooks/useClaimableAmount"
 import { useDistributionUnitState } from "@/hooks/useDistributionUnitState"
 import { RewardTokenSymbol } from "@/components/RewardTokenSymbol"
 import { RewardAmountClaimable } from "@/components/RewardAmountClaimable"
@@ -54,7 +55,7 @@ export function ClaimForm({ unit }: { unit: DistributionUnit }) {
     return (
         <form onSubmit={e => {
             e.preventDefault()
-            alert("claim")
+            action.write?.()
         }}>
             <ClaimButton loading={loading} disabled={disabled} unit={unit} />
         </form>
@@ -66,8 +67,11 @@ function ClaimButton({ loading, disabled, unit }: { loading: boolean, disabled: 
 
     const { chain } = useNetwork()
     const state = useDistributionUnitState(unit)
+    const claimable = useClaimableAmount(unit)
 
-    if (state === "loading") {
+    const amount = claimable.data
+
+    if (state === "loading" || amount === undefined) {
         return <EmptyButton />
     }
 
@@ -79,13 +83,20 @@ function ClaimButton({ loading, disabled, unit }: { loading: boolean, disabled: 
         return <SwitchChainButton chainId={chainId} />
     }
 
+    if (amount === 0n) {
+        return <NoRewardButton />
+    }
+
     if (state === "pending") {
         return <PendingDistributionButton />
     }
 
     return (
         <button type="submit" className={buttonClass} disabled={disabled}>
-            Claim <RewardAmountClaimable unit={unit} /> <RewardTokenSymbol unit={unit} />
+            {loading && <span>loading</span>}
+            <span>
+                Claim <RewardAmountClaimable unit={unit} /> <RewardTokenSymbol unit={unit} />
+            </span>
         </button>
     )
 }
@@ -116,6 +127,14 @@ function SwitchChainButton({ chainId }: { chainId: number }) {
     return (
         <button type="button" className={buttonClass} onClick={openChainModal}>
             Switch to {chain.name}
+        </button>
+    )
+}
+
+function NoRewardButton() {
+    return (
+        <button type="button" className={buttonClass} disabled>
+            Nothing to claim
         </button>
     )
 }

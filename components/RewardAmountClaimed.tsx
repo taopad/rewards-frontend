@@ -8,15 +8,15 @@ import { useClaimedAmount } from "@/hooks/useClaimedAmount"
 export function RewardAmountClaimed({ unit }: { unit: DistributionUnit }) {
     const { chainId, token } = unit
 
-    const result = useClaimedAmount(unit)
+    const claimed = useClaimedAmount(unit)
     const metadata = useTokenMetadata(chainId, token)
 
-    const claimed = result.data
+    const amount = claimed.data
     const decimals = metadata.data?.decimals.result
 
-    if (claimed === undefined || decimals === undefined) {
+    if (amount === undefined || decimals === undefined) {
         return <span>-</span>
     }
 
-    return <span>{formatUnits(claimed, decimals)}</span>
+    return <span>{formatUnits(amount, decimals)}</span>
 }
