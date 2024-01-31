@@ -14,5 +14,6 @@ export function useClaimedAmount(unit: DistributionUnit) {
         args: [address ?? "0x", token],
         scopeKey: address,
         enabled: isConnected && address !== undefined,
+        watch: true,
     })
 }
