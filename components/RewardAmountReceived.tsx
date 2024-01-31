@@ -5,17 +5,18 @@ import { DistributionUnit } from "@/types"
 import { useProofParams } from "@/hooks/useProofParams"
 import { useTokenMetadata } from "@/hooks/useTokenMetadata"
 
-export function RewardTokenAmount({ unit }: { unit: DistributionUnit }) {
+export function RewardAmountReceived({ unit }: { unit: DistributionUnit }) {
     const { chainId, token } = unit
 
+    const proof = useProofParams(unit)
     const metadata = useTokenMetadata(chainId, token)
-    const reward = useProofParams(unit)
 
+    const received = proof.data?.amount
     const decimals = metadata.data?.decimals.result
 
-    if (reward.isLoading || !reward.isSuccess || decimals === undefined) {
+    if (received === undefined || decimals === undefined) {
         return <span>-</span>
     }
 
-    return <span>{formatUnits(reward.data.amount, decimals)}</span>
+    return <span>{formatUnits(received, decimals)}</span>
 }

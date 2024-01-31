@@ -2,7 +2,9 @@ import Image from "next/image"
 
 import { DistributionUnit } from "@/types"
 import { ClaimForm } from "@/components/ClaimForm"
-import { RewardTokenAmount } from "@/components/RewardTokenAmount"
+import { RewardAmountClaimed } from "@/components/RewardAmountClaimed"
+import { RewardAmountReceived } from "@/components/RewardAmountReceived"
+import { RewardAmountClaimable } from "@/components/RewardAmountClaimable"
 import { RewardTokenSymbol } from "@/components/RewardTokenSymbol"
 import { DistributionUnitState } from "@/components/DistributionUnitState"
 import { selectChainInfo } from "@/utils/selectChainInfo"
@@ -16,7 +18,15 @@ export function DistributionUnit({ unit }: { unit: DistributionUnit }) {
             <div className="flex flex-col gap-2 flex-1">
                 <p><RewardTokenSymbol unit={unit} /></p>
                 <p><input type="text" value={unit.token} readOnly className="w-full border-0 flex-1 focus:outline-none focus:ring-0" /></p>
-                <p><RewardTokenAmount unit={unit} /></p>
+                <p>
+                    Total claimed: <RewardAmountClaimed unit={unit} />
+                </p>
+                <p>
+                    Total received: <RewardAmountReceived unit={unit} />
+                </p>
+                <p>
+                    Claimable: <RewardAmountClaimable unit={unit} />
+                </p>
                 <p>Status: <DistributionUnitState unit={unit} /></p>
                 <ClaimForm unit={unit} />
             </div>

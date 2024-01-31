@@ -12,6 +12,7 @@ export function useDistributionUnitState(unit: DistributionUnit): RewardTokenSta
         ...DistributorContract,
         functionName: "roots",
         args: [token],
+        watch: true,
     })
 
     if (onChainRoot.data === null) {
