@@ -1,10 +1,8 @@
 import { useContractRead } from "wagmi"
-import { DistributionUnit } from "@/types"
+import { DistributionUnitState, DistributionUnit } from "@/types"
 import { DistributorContract } from "@/config/contracts"
 
-type RewardTokenState = "loading" | "ready" | "pending"
-
-export function useDistributionUnitState(unit: DistributionUnit): RewardTokenState {
+export function useDistributionUnitState(unit: DistributionUnit): DistributionUnitState {
     const { chainId, token, root } = unit
 
     const onChainRoot = useContractRead({
@@ -19,5 +17,5 @@ export function useDistributionUnitState(unit: DistributionUnit): RewardTokenSta
         return "loading"
     }
 
-    return root === onChainRoot.data ? "ready" : "pending"
+    return root === onChainRoot.data ? "claimable" : "pending"
 }

@@ -1,3 +1,5 @@
+export type DistributionUnitState = "loading" | "pending" | "claimable"
+
 export type DistributionUnit = {
     chainId: number
     token: `0x${string}`

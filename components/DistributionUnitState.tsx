@@ -10,8 +10,8 @@ export function DistributionUnitState({ unit }: { unit: DistributionUnit }) {
         return <span>-</span>
     }
 
-    if (state === "ready") {
-        return <span>Ready</span>
+    if (state === "claimable") {
+        return <span>Claimable</span>
     }
 
     return <span>Pending</span>

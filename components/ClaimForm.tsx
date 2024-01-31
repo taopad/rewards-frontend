@@ -2,12 +2,16 @@
 
 import { useNetwork, useAccount } from "wagmi"
 import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from "wagmi"
-import { useChainModal } from "@rainbow-me/rainbowkit"
+import { useChainModal, useConnectModal } from "@rainbow-me/rainbowkit"
 import { DistributionUnit } from "@/types"
 import { useProofParams } from "@/hooks/useProofParams"
 import { useDistributionUnitState } from "@/hooks/useDistributionUnitState"
-import { DistributorContract } from "@/config/contracts"
+import { RewardTokenSymbol } from "@/components/RewardTokenSymbol"
+import { RewardAmountClaimable } from "@/components/RewardAmountClaimable"
 import { selectChainInfo } from "@/utils/selectChainInfo"
+import { DistributorContract } from "@/config/contracts"
+
+const buttonClass = "w-full text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
 
 const useClaim = (unit: DistributionUnit) => {
     const { token } = unit
@@ -26,7 +30,7 @@ const useClaim = (unit: DistributionUnit) => {
         args: [address ?? "0x", token, amount ?? 0n, proofs ?? []],
         scopeKey: address,
         enabled: isConnected &&
-            state === "ready" &&
+            state === "claimable" &&
             chain !== undefined &&
             address !== undefined &&
             amount !== undefined &&
@@ -42,18 +46,7 @@ const useClaim = (unit: DistributionUnit) => {
 }
 
 export function ClaimForm({ unit }: { unit: DistributionUnit }) {
-    const { chainId } = unit
-
-    const { chain } = useNetwork()
     const { prepare, action, wait } = useClaim(unit)
-
-    if (chain === undefined) {
-        return null
-    }
-
-    if (chain.id !== chainId) {
-        return <SwitchChainButton chainId={chainId} />
-    }
 
     const loading = prepare.isLoading || action.isLoading || wait.isLoading || !action.write
     const disabled = loading || !prepare.isSuccess
@@ -63,8 +56,55 @@ export function ClaimForm({ unit }: { unit: DistributionUnit }) {
             e.preventDefault()
             alert("claim")
         }}>
-            <ClaimButton loading={loading} disabled={disabled} />
+            <ClaimButton loading={loading} disabled={disabled} unit={unit} />
         </form>
+    )
+}
+
+function ClaimButton({ loading, disabled, unit }: { loading: boolean, disabled: boolean, unit: DistributionUnit }) {
+    const { chainId } = unit
+
+    const { chain } = useNetwork()
+    const state = useDistributionUnitState(unit)
+
+    if (state === "loading") {
+        return <EmptyButton />
+    }
+
+    if (chain === undefined) {
+        return <ConnectWalletButton />
+    }
+
+    if (chain.id !== chainId) {
+        return <SwitchChainButton chainId={chainId} />
+    }
+
+    if (state === "pending") {
+        return <PendingDistributionButton />
+    }
+
+    return (
+        <button type="submit" className={buttonClass} disabled={disabled}>
+            Claim <RewardAmountClaimable unit={unit} /> <RewardTokenSymbol unit={unit} />
+        </button>
+    )
+}
+
+function EmptyButton() {
+    return (
+        <button type="button" className={buttonClass} disabled>
+            -
+        </button>
+    )
+}
+
+function ConnectWalletButton() {
+    const { openConnectModal } = useConnectModal()
+
+    return (
+        <button type="button" className={buttonClass} onClick={openConnectModal}>
+            Connect wallet
+        </button>
     )
 }
 
@@ -74,23 +114,16 @@ function SwitchChainButton({ chainId }: { chainId: number }) {
     const { openChainModal } = useChainModal()
 
     return (
-        <button
-            className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
-            onClick={openChainModal}
-        >
+        <button type="button" className={buttonClass} onClick={openChainModal}>
             Switch to {chain.name}
         </button>
     )
 }
 
-function ClaimButton({ loading, disabled }: { loading: boolean, disabled: boolean }) {
+function PendingDistributionButton() {
     return (
-        <button
-            type="submit"
-            className="w-full text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
-            disabled={disabled}
-        >
-            Claim
+        <button type="button" className={buttonClass} disabled>
+            Distribution is pending
         </button>
     )
 }

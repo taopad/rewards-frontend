@@ -6,7 +6,6 @@ import { RewardAmountClaimed } from "@/components/RewardAmountClaimed"
 import { RewardAmountReceived } from "@/components/RewardAmountReceived"
 import { RewardAmountClaimable } from "@/components/RewardAmountClaimable"
 import { RewardTokenSymbol } from "@/components/RewardTokenSymbol"
-import { DistributionUnitState } from "@/components/DistributionUnitState"
 import { selectChainInfo } from "@/utils/selectChainInfo"
 
 export function DistributionUnit({ unit }: { unit: DistributionUnit }) {
@@ -24,10 +23,6 @@ export function DistributionUnit({ unit }: { unit: DistributionUnit }) {
                 <p>
                     Total received: <RewardAmountReceived unit={unit} />
                 </p>
-                <p>
-                    Claimable: <RewardAmountClaimable unit={unit} />
-                </p>
-                <p>Status: <DistributionUnitState unit={unit} /></p>
                 <ClaimForm unit={unit} />
             </div>
         </div>
