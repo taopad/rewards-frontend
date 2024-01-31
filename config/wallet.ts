@@ -5,30 +5,31 @@ import { mainnet, arbitrum } from "wagmi/chains"
 import { publicProvider } from "wagmi/providers/public"
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc"
 import { getDefaultWallets, connectorsForWallets } from "@rainbow-me/rainbowkit"
-import { injectedWallet, trustWallet, rabbyWallet } from '@rainbow-me/rainbowkit/wallets'
+import { injectedWallet, trustWallet, rabbyWallet } from "@rainbow-me/rainbowkit/wallets"
+import { testnet } from "./testnet"
 
 // Taopad project id
 const projectId = "031d4ad6ce63b830ab346fb92b96f328"
 
 // chain list.
-const supported = [mainnet, arbitrum]
+const supported = [mainnet, arbitrum, testnet]
 
 // Supported chain id type.
-type SupportedChainId = typeof supported[number]["id"]
+//type SupportedChainId = typeof supported[number]["id"]
 
 // rpc for supported chains.
-const rpcs: Record<SupportedChainId, string> = {
-    1: "https://rpc.ankr.com/eth",
-    42161: "https://rpc.ankr.com/arbitrum",
-}
+//const rpcs: Record<SupportedChainId, string> = {
+//    1: "https://rpc.ankr.com/eth",
+//    42161: "https://rpc.ankr.com/arbitrum",
+//}
 
 // testnet config
 export const { chains, publicClient } = configureChains(supported, [
-    jsonRpcProvider({
-        rpc: (chain) => ({
-            http: rpcs[chain.id as SupportedChainId],
-        }),
-    }),
+    //    jsonRpcProvider({
+    //        rpc: (chain) => ({
+    //            http: rpcs[chain.id as SupportedChainId],
+    //        }),
+    //    }),
     publicProvider(),
 ])
 
@@ -40,7 +41,7 @@ const { connectors } = getDefaultWallets({
 
 const moreConnectors = connectorsForWallets([
     {
-        groupName: 'More wallets',
+        groupName: "More wallets",
         wallets: [
             injectedWallet({ chains }),
             rabbyWallet({ chains }),
