@@ -16,19 +16,8 @@ model distributions {
   root          String @db.Char(66)
 
   @@id([chain_id, token, block_number], map: "distributions_pk")
-  @@index([token], map: "distributions_token_index")
   @@index([block_number], map: "distributions_block_number_index")
-}
-
-model snapshots {
-  block_number   BigInt
-  address        String  @db.Char(42)
-  balance        String  @db.VarChar
-  is_contract    Boolean
-  is_blacklisted Boolean
-
-  @@id([block_number, address], map: "snapshots_pk")
-  @@index([address], map: "snapshots_address_index")
+  @@index([token], map: "distributions_token_index")
 }
 
 model distributions_proofs {
@@ -43,6 +32,17 @@ model distributions_proofs {
   @@index([address], map: "distributions_proofs_address_index")
   @@index([block_number], map: "distributions_proofs_block_number_index")
   @@index([token], map: "distributions_proofs_token_index")
+}
+
+model snapshots {
+  block_number   BigInt
+  address        String  @db.Char(42)
+  balance        String  @db.VarChar
+  is_contract    Boolean
+  is_blacklisted Boolean
+
+  @@id([block_number, address], map: "snapshots_pk")
+  @@index([address], map: "snapshots_address_index")
 }
 
 model whitelists {

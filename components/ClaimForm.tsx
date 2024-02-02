@@ -71,11 +71,11 @@ function ClaimButton({ loading, disabled, unit }: { loading: boolean, disabled: 
 
     const amount = claimable.data
 
-    if (state === "loading" || amount === undefined) {
+    if (state === "loading") {
         return <EmptyButton />
     }
 
-    if (chain === undefined) {
+    if (chain === undefined || amount === undefined) {
         return <ConnectWalletButton />
     }
 
