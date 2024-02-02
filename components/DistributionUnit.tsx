@@ -2,12 +2,13 @@ import Image from "next/image"
 
 import { DistributionUnit } from "@/types"
 import { ClaimForm } from "@/components/ClaimForm"
-import { RewardAmountClaimed } from "@/components/RewardAmountClaimed"
-import { RewardAmountReceived } from "@/components/RewardAmountReceived"
+import { SnapshotLink } from "@/components/SnapshotLink"
 import { RewardTokenSymbol } from "@/components/RewardTokenSymbol"
+import { RewardAmountClaimed } from "@/components/RewardAmountClaimed"
 import { RewardAmountProgress } from "@/components/RewardAmountProgress"
+import { RewardAmountReceived } from "@/components/RewardAmountReceived"
 import { selectChainInfo } from "@/utils/selectChainInfo"
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
 
 export function DistributionUnit({ unit }: { unit: DistributionUnit }) {
     const { chain, logo } = selectChainInfo(unit.chainId)
@@ -38,6 +39,11 @@ export function DistributionUnit({ unit }: { unit: DistributionUnit }) {
                         <ClaimForm unit={unit} />
                     </div>
                 </CardContent>
+                <CardFooter className="flex justify-end">
+                    <SnapshotLink unit={unit}>
+                        <span className="muted">Your snapshots details</span>
+                    </SnapshotLink>
+                </CardFooter>
             </Card>
         </div>
     )

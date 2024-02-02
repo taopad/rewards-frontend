@@ -4,8 +4,8 @@ import { isAddress } from "viem"
 type Params = {
     chain_id: string
     token: string
-    block_number: string
     address: string
+    block_number: string
 }
 
 export async function GET(request: Request, { params }: { params: Params }) {
