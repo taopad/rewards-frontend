@@ -11,8 +11,8 @@ type Params = {
 export async function GET(request: Request, { params }: { params: Params }) {
     const chainId = parseInt(params.chain_id)
     const token = params.token
-    const blockNumber = BigInt(params.block_number)
     const address = params.address
+    const blockNumber = BigInt(params.block_number)
 
     if (isNaN(chainId)) {
         return Response.error()

@@ -12,7 +12,7 @@ export const useDistributionUnitList = () => {
     return useQuery({
         queryKey: ["reward-token-list"],
         queryFn: async (): Promise<DistributionUnit[]> => {
-            const url = "/api/rewards"
+            const url = "/api/distributions"
 
             const response = await fetch(url)
 
