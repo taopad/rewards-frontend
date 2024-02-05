@@ -8,7 +8,6 @@ export type DistributionUnit = {
 }
 
 export type ProofParams = {
-    root: `0x${string}`
     amount: bigint
     proof: `0x${string}`[]
 }

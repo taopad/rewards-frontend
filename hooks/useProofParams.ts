@@ -3,7 +3,6 @@ import { useQuery } from "@tanstack/react-query"
 import { DistributionUnit, ProofParams } from "@/types"
 
 type ProofParamsJson = {
-    root: `0x${string}`
     amount: string
     proof: `0x${string}`[]
 }

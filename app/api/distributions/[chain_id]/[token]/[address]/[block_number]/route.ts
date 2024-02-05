@@ -41,6 +41,6 @@ export async function GET(request: Request, { params }: { params: Params }) {
 
     return Response.json({
         amount: BigInt(proofsResults?.amount ?? 0n).toString(),
-        proofs: (proofsResults?.proof ?? []) as `0x${string}`[],
+        proof: (proofsResults?.proof ?? []) as `0x${string}`[],
     })
 }
