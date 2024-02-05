@@ -1,21 +1,21 @@
 import { Chain } from "viem";
 
 export const testnet = {
-    id: 14321,
+    id: 14439,
     name: "TaoPad testnet",
     network: "testnet",
     nativeCurrency: { name: "BB ETH", symbol: "BBETH", decimals: 18 },
     rpcUrls: {
         default: {
-            http: ["https://rpc.buildbear.io/fierce-gilgamesh-5ce40d72"],
+            http: ["https://rpc.buildbear.io/official-domino-40fda970"],
         },
         public: {
-            http: ["https://rpc.buildbear.io/fierce-gilgamesh-5ce40d72"],
+            http: ["https://rpc.buildbear.io/official-domino-40fda970"],
         },
     },
     blockExplorers: {
-        etherscan: { name: "Buildbear scan", url: "https://explorer.buildbear.io/fierce-gilgamesh-5ce40d72" },
-        default: { name: "Buildbear scan", url: "https://explorer.buildbear.io/fierce-gilgamesh-5ce40d72" },
+        etherscan: { name: "Buildbear scan", url: "https://explorer.buildbear.io/official-domino-40fda970" },
+        default: { name: "Buildbear scan", url: "https://explorer.buildbear.io/official-domino-40fda970" },
     },
     contracts: {
         multicall3: {

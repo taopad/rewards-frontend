@@ -29,7 +29,7 @@ export async function GET(request: Request, { params }: { params: Params }) {
     const proofsResults = await prisma.distributions_proofs.findFirst({
         select: {
             amount: true,
-            proofs: true,
+            proof: true,
         },
         where: {
             chain_id: { equals: chainId },
@@ -41,6 +41,6 @@ export async function GET(request: Request, { params }: { params: Params }) {
 
     return Response.json({
         amount: BigInt(proofsResults?.amount ?? 0n).toString(),
-        proofs: (proofsResults?.proofs ?? []) as `0x${string}`[],
+        proofs: (proofsResults?.proof ?? []) as `0x${string}`[],
     })
 }

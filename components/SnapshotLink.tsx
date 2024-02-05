@@ -13,7 +13,7 @@ export function SnapshotLink({ unit, children }: { unit: DistributionUnit, child
     }
 
     return (
-        <Link href={`/api/distributions/${chainId}/${token}/${address}`} target="_blank">
+        <Link href={`/distributions/${chainId}/${token}/${address}`} target="_blank">
             {children}
         </Link>
     )

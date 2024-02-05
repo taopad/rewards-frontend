@@ -5,7 +5,7 @@ import { DistributionUnit, ProofParams } from "@/types"
 type ProofParamsJson = {
     root: `0x${string}`
     amount: string
-    proofs: `0x${string}`[]
+    proof: `0x${string}`[]
 }
 
 export const useProofParams = (unit: DistributionUnit) => {
@@ -15,7 +15,7 @@ export const useProofParams = (unit: DistributionUnit) => {
 
     return useQuery({
         enabled: address !== undefined,
-        queryKey: ["reward-token", chainId, token, address, blockNumber.toString()],
+        queryKey: ["proof-params", chainId, token, address, blockNumber.toString()],
         queryFn: async (): Promise<ProofParams> => {
             const url = `/api/distributions/${chainId}/${token}/${address}/${blockNumber}`
 

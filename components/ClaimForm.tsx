@@ -23,19 +23,19 @@ const useClaim = (unit: DistributionUnit) => {
     const params = useProofParams(unit)
 
     const amount = params.data?.amount
-    const proofs = params.data?.proofs
+    const proof = params.data?.proof
 
     const prepare = usePrepareContractWrite({
         ...DistributorContract,
         functionName: "claim",
-        args: [address ?? "0x", token, amount ?? 0n, proofs ?? []],
+        args: [address ?? "0x", token, amount ?? 0n, proof ?? []],
         scopeKey: address,
         enabled: isConnected &&
             state === "claimable" &&
             chain !== undefined &&
             address !== undefined &&
             amount !== undefined &&
-            proofs !== undefined &&
+            proof !== undefined &&
             amount > 0n
     })
 
@@ -66,6 +66,7 @@ function ClaimButton({ loading, disabled, unit }: { loading: boolean, disabled: 
     const { chainId } = unit
 
     const { chain } = useNetwork()
+    const { isConnected } = useAccount()
     const state = useDistributionUnitState(unit)
     const claimable = useClaimableAmount(unit)
 
@@ -75,7 +76,7 @@ function ClaimButton({ loading, disabled, unit }: { loading: boolean, disabled: 
         return <EmptyButton />
     }
 
-    if (chain === undefined || amount === undefined) {
+    if (!isConnected || chain === undefined) {
         return <ConnectWalletButton />
     }
 
@@ -95,7 +96,7 @@ function ClaimButton({ loading, disabled, unit }: { loading: boolean, disabled: 
         <Button type="submit" className="w-full" disabled={disabled}>
             <Spinner loading={loading} />
             <span>
-                Claim <RewardAmountClaimable unit={unit} /> <RewardTokenSymbol unit={unit} />
+                Claim <RewardAmountClaimable unit={unit} /> <RewardTokenSymbol chainId={unit.chainId} token={unit.token} />
             </span>
         </Button>
     )

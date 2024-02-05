@@ -20,8 +20,12 @@ export function DistributionUnit({ unit }: { unit: DistributionUnit }) {
             </div>
             <Card className="bg-black flex-1 rounded-l-none">
                 <CardHeader>
-                    <CardTitle><RewardTokenSymbol unit={unit} /> on {chain.name}</CardTitle>
-                    <CardDescription>{unit.token}</CardDescription>
+                    <CardTitle>
+                        <RewardTokenSymbol chainId={unit.chainId} token={unit.token} /> on {chain.name}
+                    </CardTitle>
+                    <CardDescription>
+                        {unit.token}
+                    </CardDescription>
                 </CardHeader>
                 <CardContent>
                     <div className="flex flex-col gap-4 flex-1">
@@ -32,7 +36,9 @@ export function DistributionUnit({ unit }: { unit: DistributionUnit }) {
                             </div>
                             <div className="flex justify-between">
                                 <RewardAmountClaimed unit={unit} />
-                                <span><RewardAmountReceived unit={unit} /> <RewardTokenSymbol unit={unit} /></span>
+                                <span>
+                                    <RewardAmountReceived unit={unit} /> <RewardTokenSymbol chainId={unit.chainId} token={unit.token} />
+                                </span>
                             </div>
                             <RewardAmountProgress unit={unit} />
                         </div>

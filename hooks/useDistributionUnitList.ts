@@ -10,7 +10,7 @@ type DistributionUnitJson = {
 
 export const useDistributionUnitList = () => {
     return useQuery({
-        queryKey: ["reward-token-list"],
+        queryKey: ["distribution-unit-list"],
         queryFn: async (): Promise<DistributionUnit[]> => {
             const url = "/api/distributions"
 
