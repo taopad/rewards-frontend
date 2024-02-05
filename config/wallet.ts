@@ -11,7 +11,7 @@ import { injectedWallet, trustWallet, rabbyWallet } from "@rainbow-me/rainbowkit
 const projectId = "031d4ad6ce63b830ab346fb92b96f328"
 
 // chain list.
-const supported = [mainnet, arbitrum]
+const supported = [mainnet]
 
 // Supported chain id type.
 type SupportedChainId = typeof supported[number]["id"]
@@ -19,7 +19,7 @@ type SupportedChainId = typeof supported[number]["id"]
 // rpc for supported chains.
 const rpcs: Record<SupportedChainId, string> = {
     1: "https://rpc.ankr.com/eth",
-    42161: "https://rpc.ankr.com/arbitrum",
+    // 42161: "https://rpc.ankr.com/arbitrum",
 }
 
 // testnet config
