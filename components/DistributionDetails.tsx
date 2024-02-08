@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { formatUnits } from "viem"
 import { Spinner } from "@/components/Spinner"
 import { RewardTokenAmount } from "@/components/RewardTokenAmount"
 import { RewardTokenSymbol } from "@/components/RewardTokenSymbol"
@@ -54,7 +55,11 @@ export function DistributionDetails({ chainId, token, address }: { chainId: numb
                                         {blockNumber.toString()}
                                     </Link>
                                 </TableCell>
-                                <TableCell>{formatAmount(balance, 18)}</TableCell>
+                                <TableCell>
+                                    <span title={formatUnits(balance, 18)}>
+                                        {formatAmount(balance, 18)}
+                                    </span>
+                                </TableCell>
                                 <TableCell>
                                     <RewardTokenAmount chainId={chainId} token={token} amount={amount} />
                                 </TableCell>

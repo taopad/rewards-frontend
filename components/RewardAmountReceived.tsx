@@ -1,5 +1,6 @@
 "use client"
 
+import { formatUnits } from "viem"
 import { DistributionUnit } from "@/types"
 import { useProofParams } from "@/hooks/useProofParams"
 import { useTokenMetadata } from "@/hooks/useTokenMetadata"
@@ -18,5 +19,9 @@ export function RewardAmountReceived({ unit }: { unit: DistributionUnit }) {
         return <span>-</span>
     }
 
-    return <span>{formatAmount(amount, decimals)}</span>
+    return (
+        <span title={formatUnits(amount, decimals)}>
+            {formatAmount(amount, decimals)}
+        </span>
+    )
 }

@@ -1,5 +1,6 @@
 "use client"
 
+import { formatUnits } from "viem"
 import { useTokenMetadata } from "@/hooks/useTokenMetadata"
 import { formatAmount } from "@/utils/formatAmount"
 
@@ -12,5 +13,9 @@ export function RewardTokenAmount({ chainId, token, amount }: { chainId: number,
         return <span>-</span>
     }
 
-    return <span>{formatAmount(amount, decimals)}</span>
+    return (
+        <span title={formatUnits(amount, decimals)}>
+            {formatAmount(amount, decimals)}
+        </span>
+    )
 }
