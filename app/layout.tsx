@@ -21,7 +21,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                     <ReactQueryProvider>
                         <div className="flex flex-col gap-8">
                             <Navbar />
-                            <div className="px-8 w-full lg:max-w-[48rem] mx-auto">
+                            <div className="px-8 w-full lg:w-[48rem] mx-auto">
                                 {children}
                             </div>
                         </div>

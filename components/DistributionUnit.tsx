@@ -18,13 +18,18 @@ export function DistributionUnit({ unit }: { unit: DistributionUnit }) {
             <div className="hidden lg:block">
                 <Image className="h-16 w-16 px-4" width={1} height={1} src={`/logos/${logo}.svg`} alt={chain.name} />
             </div>
-            <Card className="bg-black flex-1 rounded-l-none">
+            <Card className="bg-black flex-1 lg:rounded-l-none">
                 <CardHeader>
                     <CardTitle>
                         <RewardTokenSymbol chainId={unit.chainId} token={unit.token} /> on {chain.name}
                     </CardTitle>
                     <CardDescription>
-                        {unit.token}
+                        <input
+                            type="text"
+                            value={unit.token}
+                            className="bg-transparent w-full border-0 flex-1 focus:outline-none focus:ring-0"
+                            readOnly
+                        />
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
