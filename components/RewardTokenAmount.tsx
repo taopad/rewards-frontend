@@ -2,6 +2,7 @@
 
 import { formatUnits } from "viem"
 import { useTokenMetadata } from "@/hooks/useTokenMetadata"
+import { formatAmount } from "@/utils/formatAmount"
 
 export function RewardTokenAmount({ chainId, token, amount }: { chainId: number, token: `0x${string}`, amount: bigint }) {
     const metadata = useTokenMetadata(chainId, token)
@@ -14,7 +15,7 @@ export function RewardTokenAmount({ chainId, token, amount }: { chainId: number,
 
     return (
         <span title={formatUnits(amount, decimals)}>
-            {formatUnits(amount, decimals)}
+            {formatAmount(amount, decimals)}
         </span>
     )
 }

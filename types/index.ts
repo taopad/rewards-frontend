@@ -18,4 +18,6 @@ export type DistributionDetails = {
     blockNumber: bigint
     balance: bigint
     amount: bigint
+    totalShares: bigint
+    totalRewards: bigint
 }

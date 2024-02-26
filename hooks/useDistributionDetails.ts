@@ -8,6 +8,8 @@ type DistributionDetailsJson = {
     block_number: string
     balance: string
     amount: string
+    total_shares: string
+    total_rewards: string
 }
 
 export const useDistributionDetails = (chainId: number, token: `0x${string}`) => {
@@ -28,6 +30,8 @@ export const useDistributionDetails = (chainId: number, token: `0x${string}`) =>
                 blockNumber: BigInt(item.block_number),
                 balance: BigInt(item.balance),
                 amount: BigInt(item.amount),
+                totalShares: BigInt(item.total_shares),
+                totalRewards: BigInt(item.total_rewards),
             }))
         },
     })
