@@ -1,8 +1,8 @@
-import { useContractReads } from "wagmi"
-import abi from "@/config/abi/IERC20Metadata"
+import { erc20Abi as abi } from "viem"
+import { useReadContracts } from "wagmi"
 
 export function useTokenMetadata(chainId: number, address: `0x${string}`) {
-    return useContractReads({
+    return useReadContracts({
         contracts: [
             {
                 abi,
@@ -17,9 +17,9 @@ export function useTokenMetadata(chainId: number, address: `0x${string}`) {
                 functionName: "decimals",
             },
         ],
-        select: (data) => ({
-            symbol: data[0],
-            decimals: data[1],
-        }),
+        allowFailure: false,
+        query: {
+            select: ([symbol, decimals]) => ({ symbol, decimals }),
+        },
     })
 }

@@ -1,18 +1,17 @@
 "use client"
 
-import { useAccount, useNetwork } from "wagmi"
+import { useAccount } from "wagmi"
 import { useAccountModal, useChainModal, useConnectModal } from "@rainbow-me/rainbowkit"
 import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/Spinner"
 import { useHasMounted } from "@/hooks/useHasMounted"
 
 export function WalletButton() {
-    const { chain } = useNetwork()
-    const { isConnected, address } = useAccount()
+    const hasMounted = useHasMounted()
     const { openChainModal } = useChainModal()
     const { openConnectModal } = useConnectModal()
     const { openAccountModal } = useAccountModal()
-    const hasMounted = useHasMounted()
+    const { isConnected, chain, address } = useAccount()
 
     if (!hasMounted) return (
         <Button className="w-48" disabled>
@@ -26,7 +25,7 @@ export function WalletButton() {
         </Button>
     )
 
-    if (chain?.unsupported) return (
+    if (chain === undefined) return (
         <Button className="w-48" variant="destructive" onClick={openChainModal}>
             Wrong chain
         </Button>

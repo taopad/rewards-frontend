@@ -13,7 +13,7 @@ export function RewardAmountClaimable({ unit }: { unit: DistributionUnit }) {
     const claimable = useClaimableAmount(unit)
 
     const amount = claimable.data
-    const decimals = metadata.data?.decimals.result
+    const decimals = metadata.data?.decimals
 
     if (amount === undefined || decimals === undefined) {
         return <span>-</span>

@@ -1,21 +1,25 @@
-import { useContractRead } from "wagmi"
+import { useEffect } from "react"
+import { useBlockNumber, useReadContract } from "wagmi"
 import { DistributionUnitState, DistributionUnit } from "@/types"
 import { DistributorContract } from "@/config/contracts"
 
 export function useDistributionUnitState(unit: DistributionUnit): DistributionUnitState {
     const { chainId, token, root } = unit
 
-    const onChainRoot = useContractRead({
+    const { data: blockNumber } = useBlockNumber({ watch: true })
+
+    const result = useReadContract({
         chainId,
         ...DistributorContract,
         functionName: "roots",
         args: [token],
-        watch: true,
     })
 
-    if (onChainRoot.data === undefined) {
+    useEffect(() => { result.refetch() }, [blockNumber])
+
+    if (result.data === undefined) {
         return "loading"
     }
 
-    return root === onChainRoot.data ? "claimable" : "pending"
+    return root === result.data ? "claimable" : "pending"
 }

@@ -3,8 +3,8 @@ import { useProofParams } from "./useProofParams"
 import { useClaimedAmount } from "./useClaimedAmount"
 
 export function useClaimableAmount(unit: DistributionUnit) {
-    const proof = useProofParams(unit)
     const result = useClaimedAmount(unit)
+    const proof = useProofParams(unit)
 
     const claimed = result.data
     const received = proof.data?.amount

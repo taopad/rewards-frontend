@@ -13,7 +13,7 @@ export function RewardAmountReceived({ unit }: { unit: DistributionUnit }) {
     const metadata = useTokenMetadata(chainId, token)
 
     const amount = proof.data?.amount
-    const decimals = metadata.data?.decimals.result
+    const decimals = metadata.data?.decimals
 
     if (amount === undefined || decimals === undefined) {
         return <span>-</span>

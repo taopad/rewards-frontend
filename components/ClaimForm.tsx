@@ -1,63 +1,67 @@
 "use client"
 
-import { useNetwork, useAccount } from "wagmi"
-import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from "wagmi"
-import { useChainModal, useConnectModal } from "@rainbow-me/rainbowkit"
 import { DistributionUnit } from "@/types"
+import { useChainModal, useConnectModal } from "@rainbow-me/rainbowkit"
+import { useAccount, useSimulateContract, useWriteContract } from "wagmi"
 import { useProofParams } from "@/hooks/useProofParams"
+import { useClaimedAmount } from "@/hooks/useClaimedAmount"
 import { useClaimableAmount } from "@/hooks/useClaimableAmount"
 import { useDistributionUnitState } from "@/hooks/useDistributionUnitState"
 import { Spinner } from "@/components/Spinner"
 import { RewardTokenSymbol } from "@/components/RewardTokenSymbol"
 import { RewardAmountClaimable } from "@/components/RewardAmountClaimable"
+import { Button } from "@/components/ui/button"
 import { selectChainInfo } from "@/utils/selectChainInfo"
 import { DistributorContract } from "@/config/contracts"
-import { Button } from "@/components/ui/button"
 
-const useClaim = (unit: DistributionUnit) => {
+const useSimulateClaim = (unit: DistributionUnit) => {
     const { token } = unit
 
-    const { chain } = useNetwork()
-    const { isConnected, address } = useAccount()
-    const state = useDistributionUnitState(unit)
     const params = useProofParams(unit)
+    const state = useDistributionUnitState(unit)
+    const { isConnected, chain, address } = useAccount()
 
     const amount = params.data?.amount
     const proof = params.data?.proof
 
-    const prepare = usePrepareContractWrite({
+    return useSimulateContract({
         ...DistributorContract,
         functionName: "claim",
         args: [address ?? "0x", token, amount ?? 0n, proof ?? []],
         scopeKey: address,
-        enabled: isConnected &&
-            state === "claimable" &&
-            chain !== undefined &&
-            address !== undefined &&
-            amount !== undefined &&
-            proof !== undefined &&
-            amount > 0n
+        query: {
+            enabled: isConnected &&
+                state === "claimable" &&
+                chain !== undefined &&
+                address !== undefined &&
+                amount !== undefined &&
+                proof !== undefined &&
+                amount > 0n,
+        },
     })
-
-    const action = useContractWrite(prepare.config)
-
-    const wait = useWaitForTransaction({ hash: action.data?.hash })
-
-    return { state, prepare, action, wait }
 }
 
 export function ClaimForm({ unit }: { unit: DistributionUnit }) {
-    const { prepare, action, wait } = useClaim(unit)
+    const claimed = useClaimedAmount(unit)
+    const { data, isLoading } = useSimulateClaim(unit)
 
-    const loading = prepare.isLoading || action.isLoading || wait.isLoading || !action.write
-    const disabled = loading || !prepare.isSuccess
+    const { writeContract, isPending } = useWriteContract({
+        mutation: {
+            onSuccess: () => {
+                claimed.refetch()
+            }
+        }
+    })
+
+    const loading = isLoading || isPending
+    const disabled = loading || !Boolean(data?.request)
 
     return (
         <form onSubmit={e => {
             e.preventDefault()
-            action.write?.()
+            writeContract(data!.request)
         }}>
-            <ClaimButton loading={loading} disabled={disabled} unit={unit} />
+            <ClaimButton loading={isLoading} disabled={disabled} unit={unit} />
         </form>
     )
 }
@@ -65,8 +69,7 @@ export function ClaimForm({ unit }: { unit: DistributionUnit }) {
 function ClaimButton({ loading, disabled, unit }: { loading: boolean, disabled: boolean, unit: DistributionUnit }) {
     const { chainId } = unit
 
-    const { chain } = useNetwork()
-    const { isConnected } = useAccount()
+    const { isConnected, chain } = useAccount()
     const state = useDistributionUnitState(unit)
     const claimable = useClaimableAmount(unit)
 

@@ -1,19 +1,20 @@
-import { useAccount, useContractRead } from "wagmi"
 import { DistributionUnit } from "@/types"
 import { DistributorContract } from "@/config/contracts"
+import { useAccount, useReadContract } from "wagmi"
 
 export function useClaimedAmount(unit: DistributionUnit) {
     const { chainId, token } = unit
 
     const { isConnected, address } = useAccount()
 
-    return useContractRead({
+    return useReadContract({
         chainId,
         ...DistributorContract,
         functionName: "claimed",
         args: [address ?? "0x", token],
         scopeKey: address,
-        enabled: isConnected && address !== undefined,
-        watch: true,
+        query: {
+            enabled: isConnected && address !== undefined,
+        },
     })
 }
