@@ -14,9 +14,9 @@ export const useProofParams = (unit: DistributionUnit) => {
 
     return useQuery({
         enabled: address !== undefined,
-        queryKey: ["proof-params", chainId, token, address, blockNumber.toString()],
+        queryKey: ["proof-params", chainId, token, blockNumber.toString(), address],
         queryFn: async (): Promise<ProofParams> => {
-            const url = `/api/distributions/${chainId}/${token}/${address}/${blockNumber}`
+            const url = `/api/distributions/${chainId}/${token}/proofs/${blockNumber}/${address}`
 
             const response = await fetch(url)
 

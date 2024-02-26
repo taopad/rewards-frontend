@@ -1,3 +1,4 @@
+import { useAccount } from "wagmi"
 import { useQuery } from "@tanstack/react-query"
 import { DistributionDetails } from "@/types"
 
@@ -9,12 +10,14 @@ type DistributionDetailsJson = {
     amount: string
 }
 
-export const useDistributionDetails = (chainId: number, token: `0x${string}`, address: `0x${string}`) => {
+export const useDistributionDetails = (chainId: number, token: `0x${string}`) => {
+    const { address } = useAccount()
+
     return useQuery({
         enabled: address !== undefined,
         queryKey: ["distribution-details", chainId, token, address],
         queryFn: async (): Promise<DistributionDetails[]> => {
-            const url = `/api/distributions/${chainId}/${token}/${address}`
+            const url = `/api/distributions/${chainId}/${token}/details/${address}`
 
             const response = await fetch(url)
 

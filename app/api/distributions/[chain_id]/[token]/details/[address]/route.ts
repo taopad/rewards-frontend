@@ -1,5 +1,7 @@
 import prisma from "@/db"
 
+export const dynamic = "force-dynamic"
+
 type Params = {
     chain_id: string
     token: string

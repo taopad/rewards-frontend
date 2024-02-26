@@ -10,9 +10,9 @@ import { formatAmount } from "@/utils/formatAmount"
 import { selectChainInfo } from "@/utils/selectChainInfo"
 import { Table, TableHeader, TableHead, TableBody, TableRow, TableCell } from "@/components/ui/table"
 
-export function DistributionDetails({ chainId, token, address }: { chainId: number, token: `0x${string}`, address: `0x${string}` }) {
+export function DistributionDetails({ chainId, token }: { chainId: number, token: `0x${string}` }) {
     const { chain } = selectChainInfo(chainId)
-    const list = useDistributionDetails(chainId, token, address)
+    const list = useDistributionDetails(chainId, token)
 
     if (list.isLoading) {
         return (
@@ -30,7 +30,7 @@ export function DistributionDetails({ chainId, token, address }: { chainId: numb
         <div className="flex flex-col gap-4">
             <h1>Snapshots</h1>
             <p>
-                Your snapshot history for <RewardTokenSymbol chainId={chainId} token={token} /> on {chain.name}.
+                Snapshot history of connected address for <RewardTokenSymbol chainId={chainId} token={token} /> on {chain.name}.
             </p>
             <Table>
                 <TableHeader>
