@@ -79,11 +79,11 @@ function ClaimButton({ loading, disabled, unit }: { loading: boolean, disabled: 
         return <EmptyButton />
     }
 
-    if (!isConnected || chain === undefined) {
+    if (!isConnected) {
         return <ConnectWalletButton />
     }
 
-    if (chain.id !== chainId) {
+    if (chain === undefined || chain.id !== chainId) {
         return <SwitchChainButton chainId={chainId} />
     }
 
