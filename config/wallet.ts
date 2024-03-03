@@ -1,5 +1,5 @@
 import { mainnet, arbitrum } from "wagmi/chains"
-import { createConfig, http, fallback } from "wagmi"
+import { createConfig, createStorage, cookieStorage, http, fallback } from "wagmi"
 import { connectorsForWallets } from "@rainbow-me/rainbowkit"
 import {
     injectedWallet,
@@ -18,6 +18,8 @@ const rpcs = {
     [arbitrum.id]: "https://rpc.ankr.com/arbitrum",
 }
 
+const storage = createStorage({ storage: cookieStorage })
+
 const connectors = connectorsForWallets(
     [
         {
@@ -35,8 +37,9 @@ const connectors = connectorsForWallets(
     { appName, projectId }
 )
 
-export const wagmiConfig = createConfig({
+export const config = createConfig({
     ssr: true,
+    storage,
     connectors,
     chains: [mainnet, arbitrum],
     transports: {

@@ -3,16 +3,17 @@
 import "@rainbow-me/rainbowkit/styles.css"
 
 import { useState } from "react"
-import { WagmiProvider } from "wagmi"
+import { WagmiProvider, cookieToInitialState } from "wagmi"
 import { RainbowKitProvider } from "@rainbow-me/rainbowkit"
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query"
-import { wagmiConfig } from "@/config/wallet"
+import { config } from "@/config/wallet"
 
-export function WalletProvider({ children }: { children: React.ReactNode }) {
+export function WalletProvider({ cookie, children }: { cookie: string | null, children: React.ReactNode }) {
+    const initialState = cookieToInitialState(config, cookie)
     const [queryClient] = useState(() => new QueryClient())
 
     return (
-        <WagmiProvider config={wagmiConfig}>
+        <WagmiProvider config={config} initialState={initialState}>
             <QueryClientProvider client={queryClient}>
                 <RainbowKitProvider>
                     {children}

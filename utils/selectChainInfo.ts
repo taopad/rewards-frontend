@@ -1,7 +1,7 @@
-import { wagmiConfig } from "@/config/wallet"
+import { config } from "@/config/wallet"
 
 export const selectChainInfo = (chainId: number) => {
-    const chain = wagmiConfig.chains.filter(chain => chain.id === chainId).shift()
+    const chain = config.chains.filter(chain => chain.id === chainId).shift()
 
     if (chain === undefined) {
         return { chain: { name: "-" }, logo: "" }
