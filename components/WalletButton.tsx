@@ -13,7 +13,7 @@ export function WalletButton() {
 
     if (isConnecting || isReconnecting) {
         return (
-            <Button className="w-48" disabled>
+            <Button className="w-40 lg:w-48" disabled>
                 <Spinner /> Connecting
             </Button>
         )
@@ -21,7 +21,7 @@ export function WalletButton() {
 
     if (!isConnected) {
         return (
-            <Button className="w-48" onClick={openConnectModal}>
+            <Button className="w-40 lg:w-48" onClick={openConnectModal}>
                 Connect wallet
             </Button>
         )
@@ -29,14 +29,14 @@ export function WalletButton() {
 
     if (chain === undefined) {
         return (
-            <Button className="w-48" variant="destructive" onClick={openChainModal}>
+            <Button className="w-40 lg:w-48" variant="destructive" onClick={openChainModal}>
                 Wrong chain
             </Button>
         )
     }
 
     return (
-        <Button className="w-48" onClick={openAccountModal}>
+        <Button className="w-40 lg:w-48" onClick={openAccountModal}>
             {formatAddress(address)}
         </Button>
     )
