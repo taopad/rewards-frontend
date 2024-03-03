@@ -4,15 +4,15 @@ import { isAddress } from "viem"
 type Params = {
     chain_id: string
     token: string
-    address: string
     block_number: string
+    address: string
 }
 
 export async function GET(request: Request, { params }: { params: Params }) {
     const chainId = parseInt(params.chain_id)
     const token = params.token
-    const address = params.address
     const blockNumber = BigInt(params.block_number)
+    const address = params.address
 
     if (isNaN(chainId)) {
         return Response.error()
@@ -26,21 +26,21 @@ export async function GET(request: Request, { params }: { params: Params }) {
         return Response.error()
     }
 
-    const proofsResults = await prisma.distributions_proofs.findFirst({
+    const result = await prisma.distributions_proofs.findFirst({
         select: {
             amount: true,
             proof: true,
         },
         where: {
             chain_id: { equals: chainId },
-            token: { equals: token },
+            token: { equals: token, mode: "insensitive" },
             block_number: { equals: blockNumber },
-            address: { equals: address },
+            address: { equals: address, mode: "insensitive" },
         },
     })
 
     return Response.json({
-        amount: BigInt(proofsResults?.amount ?? 0n).toString(),
-        proof: (proofsResults?.proof ?? []) as `0x${string}`[],
+        amount: BigInt(result?.amount ?? 0n).toString(),
+        proof: (result?.proof ?? []) as `0x${string}`[],
     })
 }

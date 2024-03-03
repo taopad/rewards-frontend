@@ -37,7 +37,7 @@ export async function GET(request: Request, { params }: { params: Params }) {
         },
         where: {
             chain_id: { equals: chainId },
-            token: { equals: token },
+            token: { equals: token, mode: "insensitive" },
         },
         orderBy: { block_number: "desc" },
     })
@@ -50,8 +50,8 @@ export async function GET(request: Request, { params }: { params: Params }) {
         },
         where: {
             chain_id: { equals: chainId },
-            token: { equals: token },
-            address: { equals: address },
+            token: { equals: token, mode: "insensitive" },
+            address: { equals: address, mode: "insensitive" },
         },
         orderBy: { block_number: "desc" },
     })

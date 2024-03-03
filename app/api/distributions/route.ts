@@ -24,7 +24,7 @@ export async function GET(request: Request) {
             },
             where: {
                 chain_id: { equals: chain_id },
-                token: { equals: token },
+                token: { equals: token, mode: "insensitive" },
                 block_number: { equals: block_number ?? 0n },
             },
         })
