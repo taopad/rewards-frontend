@@ -51,9 +51,11 @@ export function DistributionUnit({ unit }: { unit: DistributionUnit }) {
                     </div>
                 </CardContent>
                 <CardFooter className="flex justify-end">
-                    <DistributionDetailsLink unit={unit}>
-                        <span className="muted">Your snapshots details</span>
-                    </DistributionDetailsLink>
+                    <span className="text-sm">
+                        <DistributionDetailsLink unit={unit}>
+                            Your snapshots details
+                        </DistributionDetailsLink>
+                    </span>
                 </CardFooter>
             </Card>
         </div>
