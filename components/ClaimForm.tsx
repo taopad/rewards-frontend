@@ -2,7 +2,7 @@
 
 import { DistributionUnit } from "@/types"
 import { useChainModal, useConnectModal } from "@rainbow-me/rainbowkit"
-import { useAccount, useSimulateContract, useWriteContract } from "wagmi"
+import { useAccount, useSimulateContract, useWriteContract, useWaitForTransactionReceipt } from "wagmi"
 import { useProofParams } from "@/hooks/useProofParams"
 import { useClaimedAmount } from "@/hooks/useClaimedAmount"
 import { useClaimableAmount } from "@/hooks/useClaimableAmount"
@@ -21,47 +21,46 @@ const useSimulateClaim = (unit: DistributionUnit) => {
     const state = useDistributionUnitState(unit)
     const { isConnected, chain, address } = useAccount()
 
-    const amount = params.data?.amount
-    const proof = params.data?.proof
+    const chainId = chain?.id ?? 0
+    const userAddress = address ?? "0x"
+    const amount = params.data?.amount ?? 0n
+    const proof = params.data?.proof ?? []
 
     return useSimulateContract({
         ...DistributorContract,
+        chainId,
         functionName: "claim",
-        args: [address ?? "0x", token, amount ?? 0n, proof ?? []],
+        args: [userAddress, token, amount, proof],
+        account: address,
         scopeKey: address,
         query: {
-            enabled: isConnected &&
-                state === "claimable" &&
-                chain !== undefined &&
-                address !== undefined &&
-                amount !== undefined &&
-                proof !== undefined &&
-                amount > 0n,
+            enabled: isConnected
+                && state === "claimable"
+                && params.isSuccess
+                && amount > 0n,
         },
     })
 }
 
 export function ClaimForm({ unit }: { unit: DistributionUnit }) {
+    const { chain } = useAccount()
     const claimed = useClaimedAmount(unit)
+
+    const chainId = chain?.id ?? 0
+
     const { data, isLoading } = useSimulateClaim(unit)
+    const { data: hash, isPending, writeContract } = useWriteContract()
+    const { isLoading: isConfirming } = useWaitForTransactionReceipt({ hash, chainId, confirmations: 1 })
 
-    const { writeContract, isPending } = useWriteContract({
-        mutation: {
-            onSuccess: () => {
-                claimed.refetch()
-            }
-        }
-    })
-
-    const loading = isLoading || isPending
+    const loading = isLoading || isPending || isConfirming
     const disabled = loading || !Boolean(data?.request)
 
     return (
         <form onSubmit={e => {
             e.preventDefault()
-            writeContract(data!.request)
+            writeContract(data!.request, { onSuccess: () => { claimed.refetch() } })
         }}>
-            <ClaimButton loading={isLoading} disabled={disabled} unit={unit} />
+            <ClaimButton loading={loading} disabled={disabled} unit={unit} />
         </form>
     )
 }
