@@ -7,9 +7,9 @@ import { formatAmount } from "@/utils/formatAmount"
 export function RewardTokenAmount({ chainId, token, amount }: { chainId: number, token: `0x${string}`, amount: bigint }) {
     const metadata = useTokenMetadata(chainId, token)
 
-    const decimals = metadata.data?.decimals
+    const decimals = metadata.data?.decimals ?? 0
 
-    if (decimals === undefined) {
+    if (!metadata.isSuccess) {
         return <span>-</span>
     }
 

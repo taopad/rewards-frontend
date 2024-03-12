@@ -5,7 +5,6 @@ import { useChainModal, useConnectModal } from "@rainbow-me/rainbowkit"
 import { useAccount, useSimulateContract, useWriteContract, useWaitForTransactionReceipt } from "wagmi"
 import { useProofParams } from "@/hooks/useProofParams"
 import { useClaimedAmount } from "@/hooks/useClaimedAmount"
-import { useClaimableAmount } from "@/hooks/useClaimableAmount"
 import { useDistributionUnitState } from "@/hooks/useDistributionUnitState"
 import { Spinner } from "@/components/Spinner"
 import { RewardTokenSymbol } from "@/components/RewardTokenSymbol"
@@ -18,26 +17,30 @@ const useSimulateClaim = (unit: DistributionUnit) => {
     const { token } = unit
 
     const params = useProofParams(unit)
+    const claimed = useClaimedAmount(unit)
     const state = useDistributionUnitState(unit)
     const { isConnected, chain, address } = useAccount()
 
     const chainId = chain?.id ?? 0
     const userAddress = address ?? "0x"
-    const amount = params.data?.amount ?? 0n
+    const claimedAmount = claimed.data ?? 0n
+    const receivedAmount = params.data?.amount ?? 0n
     const proof = params.data?.proof ?? []
 
     return useSimulateContract({
         ...DistributorContract,
         chainId,
         functionName: "claim",
-        args: [userAddress, token, amount, proof],
+        args: [userAddress, token, receivedAmount, proof],
         account: address,
         scopeKey: address,
         query: {
             enabled: isConnected
-                && state === "claimable"
                 && params.isSuccess
-                && amount > 0n,
+                && claimed.isSuccess
+                && state === "claimable"
+                && !claimed.isRefetching
+                && receivedAmount > claimedAmount,
         },
     })
 }
@@ -68,11 +71,14 @@ export function ClaimForm({ unit }: { unit: DistributionUnit }) {
 function ClaimButton({ loading, disabled, unit }: { loading: boolean, disabled: boolean, unit: DistributionUnit }) {
     const { chainId } = unit
 
-    const { isConnected, chain } = useAccount()
+    const params = useProofParams(unit)
+    const claimed = useClaimedAmount(unit)
     const state = useDistributionUnitState(unit)
-    const claimable = useClaimableAmount(unit)
+    const { isConnected, chain } = useAccount()
 
-    const amount = claimable.data
+    const claimedAmount = claimed.data ?? 0n
+    const receivedAmount = params.data?.amount ?? 0n
+    const claimableAmount = receivedAmount - claimedAmount
 
     if (state === "loading") {
         return <EmptyButton />
@@ -86,7 +92,7 @@ function ClaimButton({ loading, disabled, unit }: { loading: boolean, disabled: 
         return <SwitchChainButton chainId={chainId} />
     }
 
-    if (amount === 0n) {
+    if (claimableAmount === 0n) {
         return <NoRewardButton />
     }
 

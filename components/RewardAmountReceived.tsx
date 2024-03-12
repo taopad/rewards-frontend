@@ -9,13 +9,13 @@ import { formatAmount } from "@/utils/formatAmount"
 export function RewardAmountReceived({ unit }: { unit: DistributionUnit }) {
     const { chainId, token } = unit
 
-    const proof = useProofParams(unit)
+    const params = useProofParams(unit)
     const metadata = useTokenMetadata(chainId, token)
 
-    const amount = proof.data?.amount
-    const decimals = metadata.data?.decimals
+    const amount = params.data?.amount ?? 0n
+    const decimals = metadata.data?.decimals ?? 0
 
-    if (amount === undefined || decimals === undefined) {
+    if (!params.isSuccess || !metadata.isSuccess) {
         return <span>-</span>
     }
 

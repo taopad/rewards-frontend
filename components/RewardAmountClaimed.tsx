@@ -12,10 +12,10 @@ export function RewardAmountClaimed({ unit }: { unit: DistributionUnit }) {
     const claimed = useClaimedAmount(unit)
     const metadata = useTokenMetadata(chainId, token)
 
-    const amount = claimed.data
-    const decimals = metadata.data?.decimals
+    const amount = claimed.data ?? 0n
+    const decimals = metadata.data?.decimals ?? 0
 
-    if (amount === undefined || decimals === undefined) {
+    if (!claimed.isSuccess || !metadata.isSuccess) {
         return <span>-</span>
     }
 
