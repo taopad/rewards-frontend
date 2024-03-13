@@ -27,36 +27,42 @@ const useSimulateClaim = (unit: DistributionUnit) => {
     const receivedAmount = params.data?.amount ?? 0n
     const proof = params.data?.proof ?? []
 
+    const enabled = isConnected
+        && params.isSuccess
+        && claimed.isSuccess
+        && state === "claimable"
+        && !claimed.isRefetching
+        && receivedAmount > claimedAmount
+
     return useSimulateContract({
         ...DistributorContract,
         chainId,
         functionName: "claim",
         args: [userAddress, token, receivedAmount, proof],
         account: address,
-        scopeKey: address,
-        query: {
-            enabled: isConnected
-                && params.isSuccess
-                && claimed.isSuccess
-                && state === "claimable"
-                && !claimed.isRefetching
-                && receivedAmount > claimedAmount,
-        },
+        query: { enabled },
     })
 }
 
 export function ClaimForm({ unit }: { unit: DistributionUnit }) {
     const { chain } = useAccount()
+    const params = useProofParams(unit)
     const claimed = useClaimedAmount(unit)
 
     const chainId = chain?.id ?? 0
+    const claimedAmount = claimed.data ?? 0n
+    const receivedAmount = params.data?.amount ?? 0n
 
     const { data, isLoading } = useSimulateClaim(unit)
     const { data: hash, isPending, writeContract } = useWriteContract()
     const { isLoading: isConfirming } = useWaitForTransactionReceipt({ hash, chainId, confirmations: 1 })
 
     const loading = isLoading || isPending || isConfirming
-    const disabled = loading || !Boolean(data?.request)
+    const disabled = loading
+        || !claimed.isSuccess
+        || claimed.isRefetching
+        || claimedAmount === receivedAmount
+        || !Boolean(data?.request)
 
     return (
         <form onSubmit={e => {
