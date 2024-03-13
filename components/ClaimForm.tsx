@@ -10,7 +10,7 @@ import { Spinner } from "@/components/Spinner"
 import { RewardTokenSymbol } from "@/components/RewardTokenSymbol"
 import { RewardAmountClaimable } from "@/components/RewardAmountClaimable"
 import { Button } from "@/components/ui/button"
-import { selectChainInfo } from "@/utils/selectChainInfo"
+import { selectChainInfo } from "@/lib/utils"
 import { DistributorContract } from "@/config/contracts"
 
 const useSimulateClaim = (unit: DistributionUnit) => {

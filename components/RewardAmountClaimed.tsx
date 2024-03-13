@@ -4,7 +4,7 @@ import { formatUnits } from "viem"
 import { DistributionUnit } from "@/types"
 import { useTokenMetadata } from "@/hooks/useTokenMetadata"
 import { useClaimedAmount } from "@/hooks/useClaimedAmount"
-import { formatAmount } from "@/utils/formatAmount"
+import { formatAmount } from "@/lib/utils"
 
 export function RewardAmountClaimed({ unit }: { unit: DistributionUnit }) {
     const { chainId, token } = unit

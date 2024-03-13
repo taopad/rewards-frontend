@@ -8,7 +8,7 @@ import { RewardAmountProgress } from "@/components/RewardAmountProgress"
 import { RewardAmountReceived } from "@/components/RewardAmountReceived"
 import { DistributionDetailsLink } from "@/components/DistributionDetailsLink"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
-import { selectChainInfo } from "@/utils/selectChainInfo"
+import { selectChainInfo } from "@/lib/utils"
 
 export function DistributionUnit({ unit }: { unit: DistributionUnit }) {
     const { chain, logo } = selectChainInfo(unit.chainId)

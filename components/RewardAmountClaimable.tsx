@@ -5,7 +5,7 @@ import { DistributionUnit } from "@/types"
 import { useProofParams } from "@/hooks/useProofParams"
 import { useClaimedAmount } from "@/hooks/useClaimedAmount"
 import { useTokenMetadata } from "@/hooks/useTokenMetadata"
-import { formatAmount } from "@/utils/formatAmount"
+import { formatAmount } from "@/lib/utils"
 
 export function RewardAmountClaimable({ unit }: { unit: DistributionUnit }) {
     const { chainId, token } = unit

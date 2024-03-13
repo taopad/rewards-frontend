@@ -7,8 +7,7 @@ import { Spinner } from "@/components/Spinner"
 import { RewardTokenAmount } from "@/components/RewardTokenAmount"
 import { RewardTokenSymbol } from "@/components/RewardTokenSymbol"
 import { useDistributionDetails } from "@/hooks/useDistributionDetails"
-import { formatAmount } from "@/utils/formatAmount"
-import { selectChainInfo } from "@/utils/selectChainInfo"
+import { selectChainInfo, formatAmount } from "@/lib/utils"
 import { Table, TableHeader, TableHead, TableBody, TableRow, TableCell } from "@/components/ui/table"
 
 export function DistributionDetails({ chainId, token }: { chainId: number, token: `0x${string}` }) {
